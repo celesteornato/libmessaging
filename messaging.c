@@ -1,8 +1,3 @@
-/*
-  This is a C23 library. You may port it to other versions if you want, should
-  be fairly easy.
-*/
-
 #include "messaging.h"
 // Wowowow that's a lot of UNIX stuff!
 // Feel free to figure out a way to port this to windows
@@ -19,8 +14,18 @@
 // As these should never be treated as part of the message since the first
 // character is skipped, these can be whatever as long as they are not the
 // same.
+
+// C23
+#if (__STDC_VERSION__ >= 202311L)
 static constexpr char MAGIC_READ_TOKEN = '?';
 static constexpr char MAGIC_WRITE_TOKEN = '!';
+#endif
+
+#if (__STDC_VERSION__ < 202311L)
+#define MAGIC_READ_TOKEN '?'
+#define MAGIC_WRITE_TOKEN '!'
+#define nullptr NULL
+#endif
 
 // Helper function, exits if something went wrong.
 static inline void ferror_handle(int result, int expected, const char *msg, int errcode)
@@ -53,6 +58,13 @@ static void close_shared(struct file_info inf)
 static void create_file(const char filename[static 1])
 {
     FILE *fp = fopen(filename, "w");
+
+    if (fp == nullptr)
+    {
+        puts("libmessaging - Could not create file!");
+        exit(-1);
+    }
+
     ferror_handle(fseek(fp, MESSAGE_SIZE, SEEK_SET), 0,
                   "libmessaging - Error seeking file: ", errno);
     ferror_handle(fputc('\0', fp), 0, "libmessaging - Error running fputc", -8);

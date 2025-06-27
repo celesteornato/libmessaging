@@ -6,7 +6,16 @@
 
 // mmap() allocates a whole page at a time, I recommend setting this to a
 // multiple of one of your system's supported page sizes.
+
+// C23
+#if (__STDC_VERSION__ >= 202311L)
 static constexpr uint16_t MESSAGE_SIZE = 4096;
+#endif
+
+#if (__STDC_VERSION__ < 202311L)
+#define MESSAGE_SIZE 4096
+#endif
+
 
 // Can be called from any process to write at filename.
 // Once sent, the process will block until the file is read.
