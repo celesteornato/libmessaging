@@ -1,0 +1,7 @@
+#+title: libmessaging
+* The best lib when you just want to get it working!
+
++ No security guarantees
++ No portability outside of x86 POSIX systems
+
+Have fun!
