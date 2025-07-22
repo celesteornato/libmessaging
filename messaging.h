@@ -9,13 +9,12 @@
 
 // C23
 #if (__STDC_VERSION__ >= 202311L)
-static constexpr uint16_t MESSAGE_SIZE = 4096;
+static constexpr uint_least16_t MESSAGE_SIZE = 4096;
 #endif
 
 #if (__STDC_VERSION__ < 202311L)
 #define MESSAGE_SIZE 4096
 #endif
-
 
 // Can be called from any process to write at filename.
 // Once sent, the process will block until the file is read.
